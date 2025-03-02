@@ -1,0 +1,23 @@
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 100px); /* Example grid */
+    gap: 5px;
+    margin: 20px auto;
+    width: 420px;
+}
+
+.tile {
+    width: 100px;
+    height: 100px;
+    background-color: #242c6e;
+    border: 1px solid #999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    cursor: pointer;
+}
+
+.tile.revealed {
+    background-color: #eee;
+}
