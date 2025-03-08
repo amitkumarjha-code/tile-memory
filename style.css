@@ -9,15 +9,24 @@
 .tile {
     width: 100px;
     height: 100px;
-    background-color: #242c6e;
+    background-color: #a6e7ee;
     border: 1px solid #999;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2em;
+    overflow: hidden;
     cursor: pointer;
 }
 
 .tile.revealed {
     background-color: #eee;
+}
+
+.tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ensure the image scales to fit within the div */
+}
+.hidden{
+    display: none;
 }
