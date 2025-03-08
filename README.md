@@ -1,3 +1,4 @@
+This is pure HTML and javascript simple game app.
 
 - `index.html`: The main HTML file that sets up the structure of the game.
 - `script.js`: The JavaScript file that contains the game logic.
