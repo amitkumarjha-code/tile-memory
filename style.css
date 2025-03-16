@@ -30,3 +30,79 @@
 .hidden{
     display: none;
 }
+/* General styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#game-container {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 600px;
+}
+
+/* Fancy label */
+.fancy-label {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+}
+
+/* Fancy dropdown */
+.fancy-dropdown {
+    font-size: 16px;
+    padding: 10px;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.fancy-dropdown:hover {
+    border-color: #0056b3;
+    background-color: #f0f8ff;
+}
+
+/* Fancy button */
+.fancy-button {
+    font-size: 16px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.fancy-button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.fancy-button:active {
+    background-color: #003f7f;
+    transform: scale(0.98);
+}
+
+/* Timer and Flip Counter */
+#game-info {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+}

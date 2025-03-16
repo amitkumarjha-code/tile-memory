@@ -1,5 +1,21 @@
 const gameBoard = document.getElementById('game-board');
 const playerScores = document.getElementById('player-scores');
+const levelSelect = document.getElementById('level');
+const startGameButton = document.getElementById('start-game');
+const timerElement = document.getElementById('timer');
+const timeLeftElement = document.getElementById('time-left');
+const flipCounterElement = document.getElementById('flip-counter');
+const flipCountElement = document.getElementById('flip-count');
+
+let flippedTiles = [];
+let matchedTiles = [];
+let isCheckingMatch = false;
+let timer = null;
+let timeLeft = 45;
+let flipCount = 0;
+let maxFlips = 30;
+let tilePairs = []; // Array to store the tile pairs
+let gameActive = false;
 
 // Function to pick random numbers within a range
 function pickRandomNumbers(min, max, count) {
@@ -15,14 +31,7 @@ function pickRandomNumbers(min, max, count) {
     return Array.from(numbers);
 }
 
-// Example usage: Pick 10 unique random numbers between 1 and 156
-const randomNumbers = pickRandomNumbers(1, 156, 10);
-const tilePairs = [...randomNumbers, ...randomNumbers]; // Example tile pairs
-let flippedTiles = []; // Array to store flipped tiles
-let matchedTiles = []; // Array to store matched tile indexes
-let isCheckingMatch = false; // Flag to prevent clicking during match check
-
-// Function to shuffle an array for randomness of images on app
+// Function to shuffle an array
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -30,79 +39,143 @@ function shuffleArray(array) {
     }
 }
 
-function generateTiles() {
+// Function to generate tiles
+function generateTiles(tilePairs) {
     shuffleArray(tilePairs);
+    gameBoard.innerHTML = ''; // Clear the game board
     tilePairs.forEach((pair, index) => {
         const tile = document.createElement('div');
         tile.classList.add('tile');
-        tile.dataset.index = index; // Store the index
-        tile.dataset.value = pair; // Store the value
+        tile.dataset.index = index;
+        tile.dataset.value = pair;
 
-        //images
-        const imageFolder = './brands';
         const imgElement = document.createElement('img');
-        imgElement.src = `${imageFolder}/${pair}.svg`;
-        imgElement.alt = "Random SVG Image";
-        imgElement.classList.add('hidden'); // Initially hide the image
+        imgElement.src = `./brands/${pair}.svg`;
+        imgElement.alt = "Tile Image";
+        imgElement.classList.add('hidden');
 
-        // Append the img element to the new div
         tile.appendChild(imgElement);
         gameBoard.appendChild(tile);
 
-        // Add event listener
         tile.addEventListener('click', handleTileClick);
     });
 }
 
 function handleTileClick(event) {
-    if (isCheckingMatch) return; // Prevent clicking during match check
+    if (!gameActive || isCheckingMatch) return; // Prevent clicks if the game is inactive or checking for a match
 
-    const clickedTile = event.currentTarget; // Use currentTarget to get the tile div
+    const clickedTile = event.currentTarget;
     const index = parseInt(clickedTile.dataset.index);
     const value = clickedTile.dataset.value;
     const imgElement = clickedTile.querySelector('img');
 
-    // Prevent clicking already flipped or matched tiles
+    // Prevent clicking already revealed or matched tiles
     if (clickedTile.classList.contains('revealed') || matchedTiles.includes(index)) {
         return;
     }
 
-    // Flip the tile
-    imgElement.classList.remove('hidden'); // Show the image
+    imgElement.classList.remove('hidden');
     clickedTile.classList.add('revealed');
-    flippedTiles.push({ tile: clickedTile, index: index, value: value });
+    flippedTiles.push({ tile: clickedTile, index, value });
 
-    // Check for match
+    if (levelSelect.value === 'hardest') {
+        flipCount++;
+        flipCountElement.textContent = flipCount;
+        if (flipCount > maxFlips) {
+            endGame(false, "You exceeded the maximum number of flips!");
+            return;
+        }
+    }
+
     if (flippedTiles.length === 2) {
-        isCheckingMatch = true; // Set flag to prevent further clicks
-        setTimeout(checkMatch, 500); // Delay for visual feedback
+        isCheckingMatch = true; // Set the flag to prevent further clicks
+        setTimeout(checkMatch, 500);
     }
 }
-
 function checkMatch() {
     const [tile1, tile2] = flippedTiles;
 
     if (tile1.value === tile2.value) {
-        // Match
+        // Match found
         matchedTiles.push(tile1.index, tile2.index);
         flippedTiles = [];
+        isCheckingMatch = false; // Allow further clicks after processing the match
         checkWinCondition();
     } else {
-        // No match
-        tile1.tile.querySelector('img').classList.add('hidden'); // Hide the image
-        tile2.tile.querySelector('img').classList.add('hidden'); // Hide the image
-        tile1.tile.classList.remove('revealed');
-        tile2.tile.classList.remove('revealed');
-        flippedTiles = [];
+        // No match, hide the tiles again
+        setTimeout(() => {
+            tile1.tile.querySelector('img').classList.add('hidden');
+            tile2.tile.querySelector('img').classList.add('hidden');
+            tile1.tile.classList.remove('revealed');
+            tile2.tile.classList.remove('revealed');
+            flippedTiles = [];
+            isCheckingMatch = false; // Reset the flag only after hiding unmatched tiles
+        }, 500); // Delay for visual feedback
     }
-
-    isCheckingMatch = false; // Reset flag to allow clicks
 }
-
+// Function to check win condition
 function checkWinCondition() {
     if (matchedTiles.length === tilePairs.length) {
-        alert('You win!'); // Basic win condition
+        endGame(true, "Congratulations! You won!");
     }
 }
 
-generateTiles();
+// Function to start the timer
+function startTimer() {
+    //timeLeft = 30;
+    timeLeftElement.textContent = timeLeft;
+    timerElement.style.display = 'block';
+
+    timer = setInterval(() => {
+        timeLeft--;
+        timeLeftElement.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            endGame(false, "Time's up! Try again.");
+        }
+    }, 1000);
+}
+
+// Function to end the game
+function endGame(isWin, message) {
+    clearInterval(timer);
+    gameActive = false; // Set the game as inactive
+    alert(message);
+    resetGame();
+}
+
+function resetGame() {
+    clearInterval(timer); // Clear any existing timer
+    flippedTiles = [];
+    matchedTiles = [];
+    isCheckingMatch = false;
+    flipCount = 0;
+    flipCountElement.textContent = flipCount;
+    timerElement.style.display = 'none';
+    flipCounterElement.style.display = 'none';
+    gameActive = false; // Reset the gameActive flag
+    timeLeft = 45
+}
+
+// Function to start the game
+function startGame() {
+    resetGame();
+    gameActive = true; // Set the game as active
+
+    const randomNumbers = pickRandomNumbers(1, 156, 10);
+    tilePairs = [...randomNumbers, ...randomNumbers];
+
+    if (levelSelect.value === 'hard' || levelSelect.value === 'hardest') {
+        startTimer();
+    }
+
+    if (levelSelect.value === 'hardest') {
+        flipCounterElement.style.display = 'block';
+    }
+
+    generateTiles(tilePairs);
+}
+
+// Event listener for the start game button
+startGameButton.addEventListener('click', startGame);

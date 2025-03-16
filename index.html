@@ -3,12 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memory tile Game</title>
+    <title>Memory Tile Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="game-container">
+        <!-- Level Selection -->
+        <div id="level-selection">
+            <label for="level" class="fancy-label">Select Level:</label>
+            <select id="level" class="fancy-dropdown">
+                <option value="easy">Easy</option>
+                <option value="hard">Hard</option>
+                <option value="hardest">Hardest</option>
+            </select>
+            <button id="start-game" class="fancy-button">Start Game</button>
+        </div>
+
+        <!-- Timer and Flip Counter -->
+        <div id="game-info">
+            <div id="timer" style="display: none;">Time Left: <span id="time-left">45</span> seconds</div>
+            <div id="flip-counter" style="display: none;">Flips: <span id="flip-count">0</span></div>
+        </div>
+
+        <!-- Game Board -->
         <div id="game-board"></div>
+
+        <!-- Player Scores -->
         <div id="player-scores"></div>
     </div>
     <script src="script.js"></script>
