@@ -19,7 +19,7 @@
 }
 
 .tile.revealed {
-    background-color: #eee;
+    background-color: greenyellow;
 }
 
 .tile img {

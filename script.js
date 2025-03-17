@@ -89,9 +89,10 @@ function handleTileClick(event) {
 
     if (flippedTiles.length === 2) {
         isCheckingMatch = true; // Set the flag to prevent further clicks
-        setTimeout(checkMatch, 500);
+        setTimeout(checkMatch, 300);
     }
 }
+
 function checkMatch() {
     const [tile1, tile2] = flippedTiles;
 
@@ -110,9 +111,10 @@ function checkMatch() {
             tile2.tile.classList.remove('revealed');
             flippedTiles = [];
             isCheckingMatch = false; // Reset the flag only after hiding unmatched tiles
-        }, 500); // Delay for visual feedback
+        }, 300); // Delay for visual feedback
     }
 }
+
 // Function to check win condition
 function checkWinCondition() {
     if (matchedTiles.length === tilePairs.length) {
