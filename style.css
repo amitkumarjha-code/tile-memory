@@ -106,3 +106,39 @@ body {
     font-size: 18px;
     color: #333;
 }
+/* Collapsible styles */
+/* Collapsible styles */
+.collapsible {
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #f4f4f4;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.collapsible:hover {
+    background-color: #e0e0e0;
+}
+
+.collapsible-content {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    background-color: #f9f9f9;
+}
+
+/* Icon styles */
+.icon {
+    font-size: 14px;
+    transition: transform 0.3s ease;
+}
+
+.icon.collapsed {
+    transform: rotate(-90deg); /* Rotate the icon when collapsed */
+}

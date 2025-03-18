@@ -16,6 +16,63 @@ let flipCount = 0;
 let maxFlips = 30;
 let tilePairs = []; // Array to store the tile pairs
 let gameActive = false;
+// Global variables for player data
+let playerData = {
+    name: "Amit",
+    wins: {
+        easy: 0,
+        hard: 0,
+        hardest: 0
+    },
+    games: {
+        easy: 0,
+        hard: 0,
+        hardest: 0
+    }
+};
+
+// Load player data from local storage
+function loadPlayerData() {
+    const storedData = localStorage.getItem("memoryGamePlayer");
+    if (storedData) {
+        playerData = JSON.parse(storedData);
+        updatePlayerStats();
+    }
+}
+
+// Save player data to local storage
+function savePlayerData() {
+    localStorage.setItem("memoryGamePlayer", JSON.stringify(playerData));
+}
+
+
+// Update player stats on the page
+function updatePlayerStats() {
+    document.getElementById("player-name-display").textContent = playerData.name;
+    document.getElementById("wins-easy").textContent = `${playerData.wins.easy} / ${playerData.games.easy}`;
+    document.getElementById("wins-hard").textContent = `${playerData.wins.hard} / ${playerData.games.hard}`;
+    document.getElementById("wins-hardest").textContent = `${playerData.wins.hardest} / ${playerData.games.hardest}`;
+    document.getElementById("player-stats").style.display = "block";
+}
+
+// Handle saving player name
+document.getElementById("save-player").addEventListener("click", () => {
+    const playerNameInput = document.getElementById("player-name").value.trim();
+    if (playerNameInput) {
+        playerData.name = playerNameInput;
+        savePlayerData();
+        updatePlayerStats();
+    }
+});
+
+// Function to handle game win
+function handleGameWin(level) {
+    playerData.wins[level]++;
+    playerData.games[level]++;
+    savePlayerData();
+    updatePlayerStats();
+    alert(`Congratulations ${playerData.name}, you won on ${level} level!`);
+}
 
 // Function to pick random numbers within a range
 function pickRandomNumbers(min, max, count) {
@@ -139,13 +196,28 @@ function startTimer() {
     }, 1000);
 }
 
+// Function to handle game loss
+function handleGameLoss(level) {
+    playerData.games[level]++;
+    savePlayerData();
+    updatePlayerStats();
+    alert(`Sorry ${playerData.name}, you lost on ${level} level. Better luck next time!`);
+}
+
 // Function to end the game
 function endGame(isWin, message) {
     clearInterval(timer);
     gameActive = false; // Set the game as inactive
+    const level = levelSelect.value;
+    if (isWin) {
+        handleGameWin(level);
+    } else {
+        handleGameLoss(level);
+    }
     alert(message);
     resetGame();
 }
+
 
 function resetGame() {
     clearInterval(timer); // Clear any existing timer
@@ -165,19 +237,79 @@ function startGame() {
     resetGame();
     gameActive = true; // Set the game as active
 
+    const level = levelSelect.value; // Get the selected level
+    playerData.games[level]++; // Increment the games played for the selected level
+    savePlayerData(); // Save the updated data to local storage
+    updatePlayerStats(); // Update the stats on the page
+
     const randomNumbers = pickRandomNumbers(1, 156, 10);
     tilePairs = [...randomNumbers, ...randomNumbers];
 
-    if (levelSelect.value === 'hard' || levelSelect.value === 'hardest') {
+    if (level === 'hard' || level === 'hardest') {
         startTimer();
     }
 
-    if (levelSelect.value === 'hardest') {
+    if (level === 'hardest') {
         flipCounterElement.style.display = 'block';
     }
 
     generateTiles(tilePairs);
 }
 
+// Load player data on page load
+window.addEventListener("load", () => {
+    loadPlayerData();
+});
 // Event listener for the start game button
 startGameButton.addEventListener('click', startGame);
+
+// Hide player name input and save button on game start
+function hidePlayerInfo() {
+    document.getElementById("player-info").style.display = "none";
+}
+
+// Toggle collapsible player stats
+function togglePlayerStats() {
+    const statsContent = document.getElementById("player-stats");
+    const icon = document.getElementById("collapsible-icon");
+
+    if (statsContent.style.display === "none") {
+        statsContent.style.display = "block";
+        icon.classList.remove("collapsed"); // Show expanded icon
+    } else {
+        statsContent.style.display = "none";
+        icon.classList.add("collapsed"); // Show collapsed icon
+    }
+}
+
+// Attach event listener to the player stats header
+document.getElementById("player-stats-header").addEventListener("click", togglePlayerStats);
+
+// Attach event listener to the player stats header
+document.getElementById("player-stats-header").addEventListener("click", togglePlayerStats);
+
+// Function to start the game
+function startGame() {
+    resetGame();
+    gameActive = true; // Set the game as active
+
+    hidePlayerInfo(); // Hide player name input and save button
+
+    const level = levelSelect.value; // Get the selected level
+    playerData.games[level]++; // Increment the games played for the selected level
+    savePlayerData(); // Save the updated data to local storage
+    updatePlayerStats(); // Update the stats on the page
+
+    const randomNumbers = pickRandomNumbers(1, 156, 10);
+    tilePairs = [...randomNumbers, ...randomNumbers];
+
+    if (level === 'hard' || level === 'hardest') {
+        startTimer();
+    }
+
+    if (level === 'hardest') {
+        flipCounterElement.style.display = 'block';
+    }
+
+    generateTiles(tilePairs);
+}

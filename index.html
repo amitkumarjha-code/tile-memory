@@ -8,6 +8,27 @@
 </head>
 <body>
     <div id="game-container">
+        <!-- Player Info -->
+        <div id="player-info">
+            <label for="player-name" class="fancy-label">Player Name:</label>
+            <input type="text" id="player-name" class="fancy-input" placeholder="Enter your name" />
+            <button id="save-player" class="fancy-button">Save Player</button>
+        </div>
+
+        <!-- Player Stats -->
+        <div id="player-stats-container">
+            <h3 id="player-stats-header" class="collapsible">
+                Player Stats
+                <span id="collapsible-icon" class="icon">▼</span>
+            </h3>
+            <div id="player-stats" class="collapsible-content" style="display: none;">
+                <p>Name: <span id="player-name-display">Amit</span></p>
+                <p>Wins (Easy): <span id="wins-easy">0 / 0</span></p>
+                <p>Wins (Hard): <span id="wins-hard">0 / 0</span></p>
+                <p>Wins (Hardest): <span id="wins-hardest">0 / 0</span></p>
+            </div>
+        </div>
+
         <!-- Level Selection -->
         <div id="level-selection">
             <label for="level" class="fancy-label">Select Level:</label>
@@ -27,9 +48,6 @@
 
         <!-- Game Board -->
         <div id="game-board"></div>
-
-        <!-- Player Scores -->
-        <div id="player-scores"></div>
     </div>
     <script src="script.js"></script>
 </body>
