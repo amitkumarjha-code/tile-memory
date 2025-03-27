@@ -1,14 +1,14 @@
 #game-board {
     display: grid;
-    grid-template-columns: repeat(4, 100px); /* Example grid */
+    grid-template-columns: repeat(4, 90px); /* Example grid */
     gap: 3px;
     margin: 30px auto;
-    width: 405px;
+    width: 370px;
 }
 
 .tile {
-    width: 98px;
-    height: 90px;
+    width: 89px;
+    height: 82px;
     background-color: #232395;
     border: 1px solid #999;
     display: flex;
