@@ -1,14 +1,14 @@
 #game-board {
     display: grid;
-    grid-template-columns: repeat(4, 90px); /* Example grid */
+    grid-template-columns: repeat(4, 88px); /* Example grid */
     gap: 3px;
     margin: 30px auto;
-    width: 370px;
+    width: 395px;
 }
 
 .tile {
-    width: 89px;
-    height: 82px;
+    width: 85px;
+    height: 78px;
     background-color: #232395;
     border: 1px solid #999;
     display: flex;
@@ -49,7 +49,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     width: 90%;
-    max-width: 500px;
+    max-width: 395px;
 }
 
 /* Fancy label */
